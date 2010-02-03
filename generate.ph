@@ -53,6 +53,7 @@ foreach ($dump as $apk) {
 
 	echo "\nPackage (hasID): " . $rtrn["pkg"];
 	echo "\nVersion: " . $rtrn["ver"];
+	echo "\nVersion Code: " . $rtrn["vercode"];
 	echo "\nName: " . $rtrn["name"];
 	echo "\nIcon: " . $rtrn["icon"];
 	echo "\nIcon(L): " . $icon;
@@ -75,6 +76,11 @@ foreach ($dump as $apk) {
 	$child = $dom->createElement('ver');
         $child = $occ->appendChild($child);
         $value = $dom->createTextNode($rtrn["ver"]);
+        $value = $child->appendChild($value);
+
+	$child = $dom->createElement('vercode');
+        $child = $occ->appendChild($child);
+        $value = $dom->createTextNode($rtrn["vercode"]);
         $value = $child->appendChild($value);
 
         $child = $dom->createElement('apkid');
@@ -128,6 +134,9 @@ function getInfo($file){
 	$out = "";
 	exec("./aapt d badging " . $DIR . $file . "|grep package| cut -d\' -f6", $out);
 	$send["ver"] = implode("",$out);
+	$out = "";
+	exec("/srv/www/aptoide/aapt d badging " . $DIR . $file . "|grep package| cut -d\' -f4", $out);
+	$send["vercode"] = implode("",$out);
 	$out = "";
 	exec("stat " .$DIR . $file . "|grep Change| cut -d ' ' -f2", $out);
 	$send["date"] = implode("",$out);
